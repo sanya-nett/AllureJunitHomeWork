@@ -17,8 +17,8 @@ import static io.qameta.allure.Allure.step;
  * Created by aleksandr.scherba on 25.12.2020
  */
 @Feature("Главная страница")
-@Story("Контактная информация вверху страницы")
-public class MainPageTest extends BaseTest {
+@Story("Авторизация пользователя")
+public class MainSignPageTest extends BaseTest {
 
     private final String USER_EMAIL = System.getProperty("login", "rahog662361@abbuzz.com");
     private final String USER_PASSWORD = System.getProperty("password", "qaz123qaz");
