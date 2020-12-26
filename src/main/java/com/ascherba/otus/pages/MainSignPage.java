@@ -37,6 +37,11 @@ public class MainSignPage extends MainPage {
         wait.until(ExpectedConditions.visibilityOf(signForm));
     }
 
+    @Step("Получить видимость формы авторизации")
+    public boolean getSignFormDisplayedStatus() {
+        return signForm.isDisplayed();
+    }
+
     /**
      * @param email User email for authorization
      */
@@ -67,6 +72,7 @@ public class MainSignPage extends MainPage {
      * @param email    User's email
      * @param password User's password
      */
+    @Step("Авторизация в системе")
     public void authorization(String email, String password) {
         openSignForm();
         step("Заполнить данные для авторизации");
