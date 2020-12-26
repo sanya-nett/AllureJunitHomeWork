@@ -39,8 +39,12 @@ public class BrowserException implements AfterTestExecutionCallback {
         Optional<Object> testInstance = extensionContext.getTestInstance();
         if (testInstance.isPresent()) {
             WebDriver driver = ((BaseTest) testInstance.get()).driver;
-            saveBrowserScreenshot(driver);
-            saveBrowserLogs(driver);
+            if (driver != null) {
+                saveBrowserScreenshot(driver);
+                saveBrowserLogs(driver);
+            } else {
+                // Browser is closed
+            }
         }
     }
 }
