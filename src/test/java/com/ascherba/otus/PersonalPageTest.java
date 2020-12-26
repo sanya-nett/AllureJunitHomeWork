@@ -33,58 +33,68 @@ public class PersonalPageTest extends BaseTest {
     public void checkThatPersonalInformationSaveAfterRestartBrowser() {
         PersonalPage personalPage = authAndMoveToPersonalPage();
 
-        step("Заполнить персональные данные на русском языке", () -> {});
-        personalPage.setName(User.NAME);
-        personalPage.setSurname(User.SURNAME);
+        PersonalPage firstPersonalPage = personalPage;
+        step("Заполнить персональные данные на русском языке", () -> {
+            firstPersonalPage.setName(User.NAME);
+            firstPersonalPage.setSurname(User.SURNAME);
+        });
 
-        step("Заполнить персональные данные латиницей", () -> {});
-        personalPage.setLatinName(User.NAME_LATIN);
-        personalPage.setLatinSurname(User.SURNAME_LATIN);
+        step("Заполнить персональные данные латиницей", () -> {
+            firstPersonalPage.setLatinName(User.NAME_LATIN);
+            firstPersonalPage.setLatinSurname(User.SURNAME_LATIN);
+        });
 
-        step("Заполнить имя в блоге и дату рождения");
-        personalPage.setBlogName(User.BLOG_NAME);
-        personalPage.setBirthDate(User.BIRTH_DATE);
+        step("Заполнить имя в блоге и дату рождения", () -> {
+            firstPersonalPage.setBlogName(User.BLOG_NAME);
+            firstPersonalPage.setBirthDate(User.BIRTH_DATE);
+        });
 
-        step("Заполнить страну/город/уровень английского");
-        personalPage.setCountry(User.COUNTRY);
-        personalPage.setCity(User.CITY);
-        personalPage.setLanguageLevel(User.LANGUAGE_LEVEL);
+        step("Заполнить страну/город/уровень английского", () -> {
+            firstPersonalPage.setCountry(User.COUNTRY);
+            firstPersonalPage.setCity(User.CITY);
+            firstPersonalPage.setLanguageLevel(User.LANGUAGE_LEVEL);
+        });
 
-        step("Очистка тестовых данных после выполнения теста");
-        personalPage.cleanExtraContacts();
-        User.EXTRA_CONTACT_DATA.forEach(personalPage::addNewExtraContact);
-        personalPage.clickOnSaveButton();
+        step("Очистка тестовых данных после выполнения теста", () -> {
+            firstPersonalPage.cleanExtraContacts();
+            User.EXTRA_CONTACT_DATA.forEach(firstPersonalPage::addNewExtraContact);
+            firstPersonalPage.clickOnSaveButton();
+        });
+
         restartBrowser();
         personalPage = authAndMoveToPersonalPage();
+        PersonalPage secondPersonalPage = personalPage;
+        step(String.format("Проверить, что имя пользователя = %s", User.NAME), () ->
+                Assertions.assertEquals(User.NAME, secondPersonalPage.getName()));
 
-        step(String.format("Проверить, что имя пользователя = %s", User.NAME));
-        Assertions.assertEquals(User.NAME, personalPage.getName());
+        step(String.format("Проверить, что фамилия пользователя = %s", User.SURNAME), () ->
+                Assertions.assertEquals(User.SURNAME, secondPersonalPage.getSurname()));
 
-        step(String.format("Проверить, что фамилия пользователя = %s", User.SURNAME));
-        Assertions.assertEquals(User.SURNAME, personalPage.getSurname());
+        step(String.format("Проверить, что имя пользователя латиницей = %s", User.NAME_LATIN), () ->
+                Assertions.assertEquals(User.NAME_LATIN, secondPersonalPage.getLatinName()));
 
-        step(String.format("Проверить, что имя пользователя латиницей = %s", User.NAME_LATIN));
-        Assertions.assertEquals(User.NAME_LATIN, personalPage.getLatinName());
+        step(String.format("Проверить, что фамилия пользователя латиницей = %s", User.SURNAME_LATIN), () ->
+                Assertions.assertEquals(User.SURNAME_LATIN, secondPersonalPage.getLatinSurname()));
 
-        step(String.format("Проверить, что фамилия пользователя латиницей = %s", User.SURNAME_LATIN));
-        Assertions.assertEquals(User.SURNAME_LATIN, personalPage.getLatinSurname());
+        step(String.format("Проверить, что имя в блоге = %s", User.BLOG_NAME), () ->
+                Assertions.assertEquals(User.BLOG_NAME, secondPersonalPage.getBlogName()));
 
-        step(String.format("Проверить, что имя в блоге = %s", User.BLOG_NAME));
-        Assertions.assertEquals(User.BLOG_NAME, personalPage.getBlogName());
+        step(String.format("Проверить, что дата рождения = %s", User.BIRTH_DATE), () ->
+                Assertions.assertEquals(User.BIRTH_DATE, secondPersonalPage.getBirthDate()));
 
-        step(String.format("Проверить, что дата рождения = %s", User.BIRTH_DATE));
-        Assertions.assertEquals(User.BIRTH_DATE, personalPage.getBirthDate());
+        step(String.format("Проверить, что страна = %s", User.COUNTRY), () ->
+                Assertions.assertEquals(User.COUNTRY, secondPersonalPage.getCountry()));
 
-        step(String.format("Проверить, что страна = %s", User.COUNTRY));
-        Assertions.assertEquals(User.COUNTRY, personalPage.getCountry());
+        step(String.format("Проверить, что город = %s", User.CITY), () ->
+                Assertions.assertEquals(User.CITY, secondPersonalPage.getCity()));
 
-        step(String.format("Проверить, что город = %s", User.CITY));
-        Assertions.assertEquals(User.CITY, personalPage.getCity());
+        step(String.format("Проверить, что уровень английского = %s", User.LANGUAGE_LEVEL), () ->
+                Assertions.assertEquals(User.LANGUAGE_LEVEL, secondPersonalPage.getLanguageLevel()));
 
-        step(String.format("Проверить, что уровень английского = %s", User.LANGUAGE_LEVEL));
-        Assertions.assertEquals(User.LANGUAGE_LEVEL, personalPage.getLanguageLevel());
-
-        step("Проверить, что контактные данные добавились");
-        Assertions.assertTrue(Maps.difference(User.EXTRA_CONTACT_DATA, personalPage.getExtraContacts()).areEqual());
+        step("Проверить, что контактные данные добавились", () ->
+                Assertions.assertTrue(Maps.difference(
+                        User.EXTRA_CONTACT_DATA,
+                        secondPersonalPage.getExtraContacts()
+                ).areEqual()));
     }
 }
