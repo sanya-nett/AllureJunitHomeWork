@@ -5,7 +5,6 @@ import com.ascherba.otus.pages.MainSignPage;
 import com.ascherba.otus.pages.PersonalPage;
 import com.google.common.collect.Maps;
 import io.qameta.allure.Feature;
-import io.qameta.allure.Step;
 import io.qameta.allure.Story;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +19,6 @@ public class PersonalPageTest extends BaseTest {
     private final String USER_EMAIL = System.getProperty("login", "rahog66236@abbuzz.com");
     private final String USER_PASSWORD = System.getProperty("password", "qaz123qaz");
 
-    @Step("Авторизация в системе")
     private PersonalPage authAndMoveToPersonalPage() {
         MainSignPage mainSignPage = new MainSignPage(driver);
         mainSignPage.openPage();
