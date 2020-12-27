@@ -1,0 +1,24 @@
+{
+    "firefox": {
+        "default": "83.0",
+        "versions": {
+            "83.0": {
+                "image": "selenoid/vnc_firefox:83.0",
+                "port": "4444",
+                "path": "/wd/hub",
+                "tmpfs": {"/tmp":"size=512m"}
+            }
+        }
+    },
+    "chrome": {
+        "default": "85.0",
+        "versions": {
+            "85.0": {
+                "image": "selenoid/vnc:chrome_85.0",
+                "port": "4444",
+                "path": "/",
+                "tmpfs": {"/tmp":"size=512m"}
+            }
+        }
+    }
+}
