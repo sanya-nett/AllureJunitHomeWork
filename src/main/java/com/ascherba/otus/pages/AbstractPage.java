@@ -15,6 +15,10 @@ public abstract class AbstractPage {
     protected WebDriverWait wait;
 
     public AbstractPage(WebDriver driver) {
+        setDriver(driver);
+    }
+
+    public void setDriver(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
         wait = new WebDriverWait(driver, 3);
