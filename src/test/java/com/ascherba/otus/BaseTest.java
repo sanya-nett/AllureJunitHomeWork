@@ -1,21 +1,21 @@
 package com.ascherba.otus;
 
 import com.ascherba.extensions.BrowserException;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Optional;
 import java.util.logging.Level;
 
 /**
@@ -25,40 +25,41 @@ import java.util.logging.Level;
 @ExtendWith(BrowserException.class)
 public class BaseTest {
 
-    protected static final WebDriverManager driverManager = ChromeDriverManager.chromedriver();
+    private final static String SELENOID_HOST = "http://localhost:4444/wd/hub";
     public WebDriver driver;
 
-    private ChromeOptions getOptions() {
+    private void runBrowser() {
         LoggingPreferences loggingPreferences = new LoggingPreferences();
         loggingPreferences.enable(LogType.BROWSER, Level.ALL);
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
-        return chromeOptions;
+        chromeOptions.setCapability("enableVNC", true);
+        chromeOptions.setCapability("screenResolution", "1920x1080");
+        chromeOptions.setCapability("sessionTimeout", "10m");
+        try {
+            driver = new RemoteWebDriver(new URL(SELENOID_HOST), chromeOptions);
+            driver.manage().window().maximize();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
-    @BeforeAll
-    public static void installDriver() {
-        driverManager.setup();
-    }
 
     @BeforeEach
     @Step("Конфигурация и создание браузера")
     private void configureDriver() {
-        driver = new ChromeDriver(getOptions());
+        runBrowser();
     }
 
     @AfterEach
     @Step("Закрытие браузера")
     private void closeBrowser() {
-        if (driver != null) {
-            driver.quit();
-        }
+        Optional.ofNullable(driver).ifPresent(WebDriver::quit);
     }
 
     @Step("Перезапустить браузер")
     public void restartBrowser() {
-        driver.quit();
-        driver = new ChromeDriver(getOptions());
+        runBrowser();
     }
 
 }
