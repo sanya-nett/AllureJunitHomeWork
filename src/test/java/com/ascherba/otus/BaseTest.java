@@ -25,7 +25,8 @@ import java.util.logging.Level;
 @ExtendWith(BrowserException.class)
 public class BaseTest {
 
-    private final static String SELENOID_HOST = "http://localhost:4444/wd/hub";
+
+    private final static String SELENOID_HOST = "http://91.206.15.114:4444/wd/hub";
     public WebDriver driver;
 
     private void runBrowser() {
